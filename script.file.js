@@ -1,22 +1,4 @@
 
-/**
- * CareConnect — Automated Test Suite (script.test.js)
- * 
- * Comprehensive Unit & Integration Tests covering:
- * - Data models & Seed Integrity
- * - Daily Schedule Generation & Adherence Math
- * - Dose State Transitions (Take, Undo, Inventory tracking)
- * - Refill Threshold & Warning Triggers
- * - Prescription CRUD Operations (Add, Edit, Delete)
- * - Doctor Appointments CRUD
- * - Caregiver Management & Emergency Contacts
- * - Accessibility Settings (Font scaling, High Contrast, Senior/Caregiver View)
- * 
- * UNIVERSAL COMPATIBILITY:
- * - Can be run with: node script.test.js (Zero external dependencies!)
- * - Fully compatible with Jest, Mocha, Vitest (npm test)
- * - Compatible with browser and Spck Editor runtimes
- */
 
 'use strict';
 
