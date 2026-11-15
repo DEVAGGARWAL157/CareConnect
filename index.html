@@ -1,0 +1,549 @@
+  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CareConnect — Accessible Elderly Care & Medication Management Platform for seniors and their circle of care.">
+  <meta name="theme-color" content="#0284c7">
+  <title>CareConnect — Elderly Care & Medication Management</title>
+  
+  <!-- Separate Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-senior">
+
+  <!-- Accessible Skip Link for Screen Readers / Keyboard Users -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ========================================================================
+       Top Accessibility & Emergency Bar
+       ======================================================================== -->
+  <aside class="a11y-bar" aria-label="Accessibility & Emergency Controls">
+    <div class="container a11y-bar-content">
+      
+      <!-- Text Size Scaler -->
+      <div class="a11y-group">
+        <span class="a11y-label">Text Size:</span>
+        <button type="button" class="btn-a11y" id="fontDecBtn" aria-label="Standard Font Size">A (Normal)</button>
+        <button type="button" class="btn-a11y" id="fontIncBtn" aria-label="Large Font Size">A+ (Large)</button>
+        <button type="button" class="btn-a11y" id="fontXlBtn" aria-label="Extra Large Font Size">A++ (Max)</button>
+      </div>
+
+      <!-- High Contrast & Audio & Role View Switcher -->
+      <div class="a11y-group">
+        <button type="button" class="btn-a11y" id="toggleContrastBtn" aria-label="Toggle High-Contrast View">
+          <span aria-hidden="true">👁️</span> High Contrast
+        </button>
+
+        <button type="button" class="btn-a11y" id="toggleUserModeBtn" aria-label="Switch between Senior and Caregiver view">
+          <span>👥 Switch to Caregiver View</span>
+        </button>
+
+        <!-- Emergency Quick Dial Trigger -->
+        <button type="button" class="btn-emergency" id="emergencySosBtn" aria-label="Open Emergency Help & SOS Contacts">
+          <span aria-hidden="true">🚨</span> EMERGENCY SOS
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ========================================================================
+       Main Site Header
+       ======================================================================== -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="brand-wrapper" onclick="window.careConnect && window.careConnect.switchTab('today'); return false;" aria-label="CareConnect Home">
+        <div class="brand-icon" aria-hidden="true">💙</div>
+        <div class="brand-info">
+          <h1>CareConnect</h1>
+          <span class="brand-subtitle">Elderly Care & Medication Support</span>
+        </div>
+      </a>
+
+      <!-- Real-time Clock, Profile & Mode Badge -->
+      <div class="header-meta">
+        <div class="live-clock-card" aria-label="Current time and date">
+          <div class="live-time" id="liveClockTime">--:--:-- --</div>
+          <div class="live-date" id="liveClockDate">Loading date...</div>
+        </div>
+
+        <div class="profile-pill" aria-label="Current profile Eleanor Vance">
+          <div class="profile-avatar" aria-hidden="true">EV</div>
+          <div>
+            <div class="profile-name">Eleanor Vance (74)</div>
+            <span class="mode-badge senior" id="activeModeBadge">Senior Mode</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       Main Tab Navigation
+       ======================================================================== -->
+  <nav class="main-nav" role="navigation" aria-label="Primary Platform Navigation">
+    <div class="container">
+      <ul class="nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-btn active" role="tab" aria-selected="true" data-tab="today" id="tab-btn-today" aria-controls="tab-today">
+            <span aria-hidden="true">📋</span> Today’s Routine
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-btn" role="tab" aria-selected="false" data-tab="meds" id="tab-btn-meds" aria-controls="tab-meds">
+            <span aria-hidden="true">💊</span> All Medicines
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-btn" role="tab" aria-selected="false" data-tab="appts" id="tab-btn-appts" aria-controls="tab-appts">
+            <span aria-hidden="true">🩺</span> Doctor Appointments
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-btn" role="tab" aria-selected="false" data-tab="caregivers" id="tab-btn-caregivers" aria-controls="tab-caregivers">
+            <span aria-hidden="true">👥</span> Caregiver & Family
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-btn" role="tab" aria-selected="false" data-tab="alerts" id="tab-btn-alerts" aria-controls="tab-alerts">
+            <span aria-hidden="true">🔔</span> Alerts & History 
+            <span class="nav-badge" id="alertsNavBadge" style="display: none;">0</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       Main Content Body
+       ======================================================================== -->
+  <main class="main-content" id="main-content" tabindex="-1" role="main">
+    <div class="container">
+
+      <!-- TAB 1: TODAY'S ROUTINE (SENIOR DASHBOARD) -->
+      <section class="tab-panel active" id="tab-today" role="tabpanel" aria-labelledby="tab-btn-today">
+        
+        <!-- Voice Assistant Hero Banner -->
+        <div class="hero-assistant" role="region" aria-label="Daily greeting and audio helper">
+          <div class="hero-text">
+            <h2>Good Morning, Eleanor! 👋</h2>
+            <p id="heroDateGreeting">Welcome to your daily health companion.</p>
+            <p id="heroSubMessage" style="margin-top: 0.35rem; font-size: 1.05rem;">
+              Checking today’s medication schedule...
+            </p>
+          </div>
+          <div class="hero-actions">
+            <button type="button" class="btn-speak" id="speakRoutineBtn" aria-label="Listen to today's medication routine spoken aloud">
+              <span aria-hidden="true">🔊</span> Read Routine Aloud
+            </button>
+          </div>
+        </div>
+
+        <!-- Adherence Overview Stats -->
+        <div class="stats-grid" aria-label="Daily Adherence Overview">
+          
+          <div class="stat-card">
+            <div class="stat-icon green" aria-hidden="true">✓</div>
+            <div class="stat-content">
+              <div class="stat-value">
+                <span id="statTakenDoses">0</span> / <span id="statTotalDoses">0</span>
+              </div>
+              <div class="stat-label">Doses Taken Today</div>
+              <div class="progress-bar-container" aria-hidden="true">
+                <div class="progress-bar-fill" id="statProgressBarFill" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon blue" aria-hidden="true">📊</div>
+            <div class="stat-content">
+              <div class="stat-value" id="statAdherencePercent">0%</div>
+              <div class="stat-label">Daily Adherence Rate</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon amber" aria-hidden="true">⏰</div>
+            <div class="stat-content">
+              <div class="stat-value" id="statDueCount">0</div>
+              <div class="stat-label">Doses Due Right Now</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon purple" aria-hidden="true">📅</div>
+            <div class="stat-content">
+              <div class="stat-value" style="font-size: 1.25rem;">Nov 18, 10:30 AM</div>
+              <div class="stat-label">Next Doctor: Dr. Marcus Ross</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Today's Routine Timeline -->
+        <div class="section-header">
+          <div class="section-title">
+            <h2>Today’s Medication Schedule</h2>
+          </div>
+          <div class="section-actions">
+            <button type="button" class="btn btn-secondary" onclick="window.careConnect && window.careConnect.switchTab('meds')">
+              + Manage Prescriptions
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Timeline Slots Container -->
+        <div id="todaySlotsContainer" aria-live="polite"></div>
+
+      </section>
+
+      <!-- TAB 2: ALL MEDICINES (CRUD MANAGEMENT) -->
+      <section class="tab-panel" id="tab-meds" role="tabpanel" aria-labelledby="tab-btn-meds">
+        
+        <div class="section-header">
+          <div>
+            <h2>Prescription & Medicine Management</h2>
+            <p>Add, edit dosages, track refills, or review prescriber instructions.</p>
+          </div>
+          <div class="section-actions">
+            <button type="button" class="btn btn-primary" id="openAddMedModalBtn" aria-label="Add new prescription">
+              <span aria-hidden="true">➕</span> Add New Medicine
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter & Search Controls -->
+        <div class="controls-bar" role="search">
+          <div class="search-filter-group">
+            <input type="text" class="input-search" id="medSearchInput" placeholder="🔍 Search medicine name, condition..." aria-label="Search medicine name or condition">
+            
+            <select class="select-filter" id="medTimeFilter" aria-label="Filter medications by time slot">
+              <option value="all">All Times of Day</option>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+              <option value="Night">Night</option>
+            </select>
+          </div>
+          <div>
+            <span style="font-size: 0.95rem; font-weight: 600; color: var(--color-text-muted);">
+              Refill alerts trigger at 5 pills remaining
+            </span>
+          </div>
+        </div>
+
+        <!-- Medication List Cards Grid -->
+        <div class="med-list-grid" id="medListGrid" aria-live="polite"></div>
+
+      </section>
+
+      <!-- TAB 3: DOCTOR APPOINTMENTS -->
+      <section class="tab-panel" id="tab-appts" role="tabpanel" aria-labelledby="tab-btn-appts">
+        
+        <div class="section-header">
+          <div>
+            <h2>Doctor Appointments & Healthcare Visits</h2>
+            <p>Track upcoming clinic consultations, test prep notes, and transportation.</p>
+          </div>
+          <div class="section-actions">
+            <button type="button" class="btn btn-primary" id="openAddApptModalBtn">
+              <span aria-hidden="true">➕</span> Schedule Appointment
+            </button>
+          </div>
+        </div>
+
+        <div class="appointments-grid" id="appointmentsGrid"></div>
+
+      </section>
+
+      <!-- TAB 4: CAREGIVER & FAMILY ACCESS -->
+      <section class="tab-panel" id="tab-caregivers" role="tabpanel" aria-labelledby="tab-btn-caregivers">
+        
+        <div class="section-header">
+          <div>
+            <h2>Circle of Care: Family & Healthcare Team</h2>
+            <p>Designated family proxies, emergency contacts, and visiting nurses.</p>
+          </div>
+          <div class="section-actions">
+            <button type="button" class="btn btn-secondary" id="openAddCaregiverBtn">
+              + Add Care Team Member
+            </button>
+            <button type="button" class="btn btn-danger-outline" id="resetDemoDataBtn">
+              🔄 Reset Demo Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Caregivers Grid -->
+        <div class="caregiver-team-grid" id="caregiversGrid"></div>
+
+        <!-- Medication Adherence Audit Log -->
+        <div class="activity-log-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>📋 Caregiver Adherence Audit Log</h3>
+            <span style="font-size: 0.85rem; color: var(--color-text-subtle);">Real-time Activity Stream</span>
+          </div>
+          <p style="margin-top: 0.25rem;">Verifiable timeline of marked doses and prescription changes for family peace of mind.</p>
+          
+          <ul class="activity-list" id="activityLogList" aria-live="polite"></ul>
+        </div>
+
+      </section>
+
+      <!-- TAB 5: ALERTS & NOTIFICATIONS CENTER -->
+      <section class="tab-panel" id="tab-alerts" role="tabpanel" aria-labelledby="tab-btn-alerts">
+        
+        <div class="section-header">
+          <div>
+            <h2>Active Health Alerts & Notification Center</h2>
+            <p>Immediate reminders for overdue doses, pharmacy refills, and upcoming appointments.</p>
+          </div>
+        </div>
+
+        <div id="urgentAlertsContainer" style="margin-bottom: 2rem;"></div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>CareConnect</strong> — Elderly Care & Medication Management Platform.
+      </div>
+      <div class="footer-badges">
+        <span class="badge-a11y-pill">♿ WCAG 2.1 AA Compliant</span>
+        <span class="badge-a11y-pill">🔊 SpeechSynthesis Ready</span>
+        <span class="badge-a11y-pill">📱 Spck Mobile Optimized</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL 1: EMERGENCY SOS & QUICK CONTACTS -->
+  <div class="modal-backdrop" id="emergencyModal" role="dialog" aria-modal="true" aria-labelledby="emergencyModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="emergencyModalTitle" style="color: var(--color-danger);">
+          🚨 Urgent Emergency Assistance
+        </h3>
+        <button type="button" class="modal-close" id="closeEmergencyModalBtn" aria-label="Close emergency modal">&times;</button>
+      </div>
+
+      <p style="font-size: 1.1rem; font-weight: 600;">
+        If you are experiencing chest pain, difficulty breathing, or severe illness, tap <strong>911</strong> immediately:
+      </p>
+
+      <div style="margin: 0.5rem 0;">
+        <a href="tel:911" class="btn-call" style="width: 100%; justify-content: center; font-size: 1.35rem; padding: 1rem;" onclick="window.careConnect && window.careConnect.showToast('Calling 911 Emergency Services...', 'danger')">
+          🚑 Call 911 (Emergency Services)
+        </a>
+      </div>
+
+      <h4 style="margin-top: 1rem;">Primary Contacts & Doctor:</h4>
+      <div class="emergency-contacts-list" id="emergencyContactsList"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD / EDIT MEDICATION -->
+  <div class="modal-backdrop" id="medicationModal" role="dialog" aria-modal="true" aria-labelledby="medModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="medModalTitle">Add New Prescription</h3>
+        <button type="button" class="modal-close" id="closeMedModalBtn" aria-label="Close medication modal">&times;</button>
+      </div>
+
+      <form id="medicationForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="medNameInput">Medicine Name *</label>
+            <input type="text" class="form-input" id="medNameInput" required placeholder="e.g. Lisinopril">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="medStrengthInput">Strength / Dosage *</label>
+            <input type="text" class="form-input" id="medStrengthInput" required placeholder="e.g. 10 mg or 1 tablet">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="medConditionInput">Condition Treated *</label>
+            <input type="text" class="form-input" id="medConditionInput" required placeholder="e.g. High Blood Pressure">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="medFormSelect">Form *</label>
+            <select class="form-select" id="medFormSelect" required>
+              <option value="tablet">Tablet</option>
+              <option value="capsule">Capsule</option>
+              <option value="liquid">Liquid / Syrup</option>
+              <option value="drops">Eye / Ear Drops</option>
+              <option value="inhaler">Inhaler</option>
+              <option value="injection">Injection</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Scheduled Time(s) of Day *</label>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.25rem;">
+            <label style="display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" name="medTimeSlot" value="Morning" checked> ☀️ Morning (8:00 AM)
+            </label>
+            <label style="display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" name="medTimeSlot" value="Afternoon"> 🌤️ Afternoon (1:00 PM)
+            </label>
+            <label style="display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" name="medTimeSlot" value="Evening"> 🌅 Evening (6:00 PM)
+            </label>
+            <label style="display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" name="medTimeSlot" value="Night"> 🌙 Night (9:00 PM)
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="medInstructionsInput">Instructions & Food Guidance *</label>
+          <input type="text" class="form-input" id="medInstructionsInput" required placeholder="e.g. Take with a meal and full glass of water">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="medRemainingInput">Pills Currently Left *</label>
+            <input type="number" class="form-input" id="medRemainingInput" min="0" max="999" value="30" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="medTotalInput">Bottle Total Quantity</label>
+            <input type="number" class="form-input" id="medTotalInput" min="1" max="999" value="30">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="medDoctorInput">Prescribing Doctor</label>
+          <input type="text" class="form-input" id="medDoctorInput" placeholder="e.g. Dr. Marcus Ross">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="cancelMedBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Prescription</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: SCHEDULE DOCTOR APPOINTMENT -->
+  <div class="modal-backdrop" id="apptModal" role="dialog" aria-modal="true" aria-labelledby="apptModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="apptModalTitle">Schedule Doctor Appointment</h3>
+        <button type="button" class="modal-close" id="closeApptModalBtn" aria-label="Close appointment modal">&times;</button>
+      </div>
+
+      <form id="apptForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="apptDoctorInput">Doctor / Specialist Name *</label>
+            <input type="text" class="form-input" id="apptDoctorInput" required placeholder="e.g. Dr. Sarah Jenkins">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="apptSpecialtyInput">Specialty *</label>
+            <input type="text" class="form-input" id="apptSpecialtyInput" required placeholder="e.g. Cardiologist">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="apptClinicInput">Clinic / Hospital Address *</label>
+          <input type="text" class="form-input" id="apptClinicInput" required placeholder="e.g. St. Jude Hospital, Room 304">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="apptDateInput">Date *</label>
+            <input type="date" class="form-input" id="apptDateInput" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="apptTimeInput">Time *</label>
+            <input type="text" class="form-input" id="apptTimeInput" placeholder="e.g. 10:30 AM" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="apptPhoneInput">Clinic Phone Number</label>
+          <input type="tel" class="form-input" id="apptPhoneInput" placeholder="(555) 123-4567">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="apptNotesInput">Visit Reason & Questions for Doctor</label>
+          <textarea class="form-textarea" id="apptNotesInput" placeholder="e.g. Check blood pressure meds, ask about knee stiffness"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="apptTransportInput">Transportation / Accompaniment Note</label>
+          <input type="text" class="form-input" id="apptTransportInput" placeholder="e.g. Sarah driving, bring wheelchair">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="cancelApptBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Schedule Visit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADD CAREGIVER / FAMILY MEMBER -->
+  <div class="modal-backdrop" id="caregiverModal" role="dialog" aria-modal="true" aria-labelledby="cgModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cgModalTitle">Add Care Team Member</h3>
+        <button type="button" class="modal-close" id="closeCaregiverModalBtn" aria-label="Close caregiver modal">&times;</button>
+      </div>
+
+      <form id="caregiverForm">
+        <div class="form-group">
+          <label class="form-label" for="cgNameInput">Full Name *</label>
+          <input type="text" class="form-input" id="cgNameInput" required placeholder="e.g. Michael Vance">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="cgRelationInput">Relationship *</label>
+            <input type="text" class="form-input" id="cgRelationInput" required placeholder="e.g. Grandson / Neighbor">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cgRoleInput">Access Role</label>
+            <input type="text" class="form-input" id="cgRoleInput" placeholder="e.g. Emergency Contact">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="cgPhoneInput">Phone Number *</label>
+            <input type="tel" class="form-input" id="cgPhoneInput" required placeholder="(555) 000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cgEmailInput">Email Address</label>
+            <input type="email" class="form-input" id="cgEmailInput" placeholder="name@example.com">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="cancelCaregiverBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container for Notification Popups -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Separate Custom JavaScript -->
+  <script src="script.js" defer></script>
+</body>
+</html>
