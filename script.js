@@ -1,10 +1,6 @@
 
 
-/**
- * CareConnect — Elderly Care & Medication Management Platform
- * Production-ready Vanilla JavaScript (ES6+)
- * WCAG 2.1 AA/AAA Accessible, Audio & Speech Synthesis Enabled, LocalStorage Seeded
- */
+
 
 (function () {
   'use strict';
