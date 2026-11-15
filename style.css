@@ -1,12 +1,4 @@
 
-/* ==========================================================================
-   CareConnect — Elderly Care & Medication Management Design System
-   Modern, Accessible (WCAG 2.1 AA/AAA), Senior-Friendly Styling
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   1. CSS Variables & Theming
-   -------------------------------------------------------------------------- */
 :root {
   /* Color Palette - Soft Clinical & High Readability */
   --color-primary: #0284c7;        /* Sky Blue 600 */
